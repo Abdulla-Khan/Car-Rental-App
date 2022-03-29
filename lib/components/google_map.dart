@@ -56,14 +56,14 @@ class _LocationTrackingState extends State<LocationTracking> {
         toastLength: Toast.LENGTH_SHORT);
   }
 
-  LatLng sourceLocation = LatLng(28.432864, 77.002563);
-  LatLng destinationLatlng = LatLng(28.431626, 77.002475);
+  LatLng sourceLocation = const LatLng(28.432864, 77.002563);
+  LatLng destinationLatlng = const LatLng(28.431626, 77.002475);
 
-  Completer<GoogleMapController> _controller = Completer();
+  final Completer<GoogleMapController> _controller = Completer();
 
-  Set<Marker> _marker = Set<Marker>();
+  final Set<Marker> _marker = <Marker>{};
 
-  Set<Polyline> _polylines = Set<Polyline>();
+  final Set<Polyline> _polylines = <Polyline>{};
   List<LatLng> polylineCoordinates = [];
   late PolylinePoints polylinePoints;
 
@@ -115,13 +115,13 @@ class _LocationTrackingState extends State<LocationTracking> {
         LatLng(destinationLatlng.latitude, destinationLatlng.longitude);
 
     _marker.add(Marker(
-      markerId: MarkerId('sourcePosition'),
+      markerId: const MarkerId('sourcePosition'),
       position: sourceposition,
     ));
 
     _marker.add(
       Marker(
-        markerId: MarkerId('destinationPosition'),
+        markerId: const MarkerId('destinationPosition'),
         position: destinationPosition,
       ),
     );
@@ -138,16 +138,16 @@ class _LocationTrackingState extends State<LocationTracking> {
     );
 
     if (result.points.isNotEmpty) {
-      result.points.forEach((pointLatLng) {
+      for (var pointLatLng in result.points) {
         polylineCoordinates
             .add(LatLng(pointLatLng.latitude, pointLatLng.longitude));
-      });
+      }
     }
 
     setState(() {
       _polylines.add(Polyline(
         width: 5,
-        polylineId: PolylineId('polyline'),
+        polylineId: const PolylineId('polyline'),
         color: Colors.blueAccent,
         points: polylineCoordinates,
       ));
@@ -174,7 +174,7 @@ class _LocationTrackingState extends State<LocationTracking> {
       _marker.removeWhere((marker) => marker.mapsId.value == 'sourcePosition');
 
       _marker.add(Marker(
-        markerId: MarkerId('sourcePosition'),
+        markerId: const MarkerId('sourcePosition'),
         position: sourcePosition,
       ));
     });
@@ -189,7 +189,7 @@ class _LocationTrackingState extends State<LocationTracking> {
       target: currentLocation != null
           ? LatLng(currentLocation!.latitude ?? 0.0,
               currentLocation!.longitude ?? 0.0)
-          : LatLng(0.0, 0.0),
+          : const LatLng(0.0, 0.0),
     );
 
     return currentLocation == null
@@ -197,13 +197,13 @@ class _LocationTrackingState extends State<LocationTracking> {
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             alignment: Alignment.center,
-            child: CircularProgressIndicator(),
+            child: const CircularProgressIndicator(),
           )
         : SafeArea(
             child: Scaffold(
               floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
               floatingActionButton: FloatingActionButton.extended(
-                label: Text('Confirm'),
+                label: const Text('Confirm'),
                 shape: const RoundedRectangleBorder(),
                 onPressed: () => openCheckout(),
               ),
@@ -233,7 +233,7 @@ class _LocationTrackingState extends State<LocationTracking> {
 }
 
 class GoogleMapApi {
-  String _url = "AIzaSyBTljmsfH0TCR0QmwcgSJEo5kmfLUosqPA";
+  final String _url = "AIzaSyBTljmsfH0TCR0QmwcgSJEo5kmfLUosqPA";
 
   String get url => _url;
 }
